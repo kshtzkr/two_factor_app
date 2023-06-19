@@ -1,0 +1,42 @@
+<h2>Account Settings</h2>
+<%= flash[:alert].present? %>
+<% if flash[:alert] %>
+  <div class="alert alert-danger">
+    <%= flash[:alert] %>
+  </div>
+<% end %>
+
+<%= form_for(current_user, url: update_account_settings_path) do |f| %>
+  <%= render "devise/shared/error_messages", resource: current_user %>
+
+  <div class="field">
+    <%= f.label :email %><br>
+    <%= f.email_field :email, autocomplete: "email" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password %><br>
+    <%= f.password_field :password, autocomplete: "new-password" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password_confirmation %><br>
+    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+  </div>
+
+  <div class="field">
+    <%= f.check_box :otp_enabled %>
+    <%= f.label :otp_enabled, 'Enable Two-Factor Authentication' %>
+  </div>
+
+  <% if current_user.otp_enabled %>
+    <div class="field">
+      <%= label_tag :otp_secret_key, "Verification Code" %><br>
+      <%= text_field_tag :otp_secret_key, nil, autocomplete: "off", required: true %>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit "Update Account Settings" %>
+  </div>
+<% end %>
